@@ -1,14 +1,6 @@
+import React from "react";
 import Image from "next/image";
-
-type ZoneType = {
-  location: string;
-  needsMaintenance: boolean;
-  isSafe: boolean;
-};
-
-interface ZoneProps {
-  zone?: ZoneType;
-}
+import { ZoneProps } from "./Zone.type";
 
 const Zone: React.FC<ZoneProps> = ({ zone }) => {
   const { needsMaintenance, isSafe } = zone || {};
