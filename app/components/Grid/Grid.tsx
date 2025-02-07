@@ -1,14 +1,6 @@
 import ZoneComponent from "../Zone";
 
-type Zone = {
-  location: string;
-  needsMaintenance: boolean;
-  isSafe: boolean;
-};
-
-interface GridProps {
-  zones: Zone[];
-}
+import { GridProps } from "./Zone.type";
 
 const Grid: React.FC<GridProps> = ({ zones }) => {
   return (
