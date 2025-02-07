@@ -1,17 +1,14 @@
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
-  preset: "ts-jest",
+  preset: "ts-jest/presets/js-with-ts",
   testEnvironment: "jsdom",
   transform: {
-    "^.+\\.(ts|tsx)$": "ts-jest", // Use ts-jest for TypeScript and JSX
+    "^.+\\.tsx?$": ["ts-jest", { tsconfig: "tsconfig.json" }],
   },
   moduleNameMapper: {
-    "\\.(css|scss|less)$": "identity-obj-proxy", // Mock CSS imports
-    "\\.(jpg|jpeg|png|gif|svg)$": "<rootDir>/__mocks__/fileMock.js", // Mock assets
+    "\\.(css|scss|sass)$": "identity-obj-proxy", 
+    "^@/(.*)$": "<rootDir>/$1", 
   },
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"], // Setup file for testing-library
-  collectCoverage: true,
-  collectCoverageFrom: [
-    "app/components/**/*.{ts,tsx}",
-    "!**/node_modules/**",
-  ],
+  transformIgnorePatterns: ["/node_modules/"], 
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"], 
 };

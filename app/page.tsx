@@ -1,57 +1,40 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Grid from "./components/Grid";
 import Image from "next/image";
-
-type Zone = {
-  location: string;
-  needsMaintenance: boolean;
-  isSafe: boolean;
-};
+import { fetchZones } from "./api/zoneservices";
+import { ZoneType } from "./components/Zone/Zone.type";
+import { v4 as uuidv4 } from "uuid";
 
 const Home: React.FC = () => {
-  const [zones, setZones] = useState<Zone[]>([]);
+  const [zones, setZones] = useState<ZoneType[]>([]);
+  const [visitorId, setVisitorId] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://dinoparks.herokuapp.com/nudls/feed"
-        );
-        const processedZones = processLogs(response.data);
-        setZones(processedZones);
-      } catch (error) {
-        console.error("Error fetching data", error);
-      }
-    };
+    if (typeof window !== "undefined") {
+      const existingVisitorId = localStorage.getItem("visitorId");
+      const uniqueVisitorId = existingVisitorId || uuidv4();
 
-    fetchData();
+      if (!existingVisitorId) {
+        localStorage.setItem("visitorId", uniqueVisitorId);
+      }
+      if (!visitorId) {
+        setVisitorId(uniqueVisitorId);
+      }
+
+      const fetchData = async () => {
+        try {
+          const zonesData = await fetchZones(uniqueVisitorId);
+          setZones(zonesData);
+        } catch (error) {
+          console.error("Error fetching data", error);
+        }
+      };
+
+      fetchData();
+    }
   }, []);
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const processLogs = (logs: any[]): Zone[] => {
-    const zoneMap: Record<string, Zone> = {};
-
-    logs.forEach((log) => {
-      if (
-        log.kind === "dino_location_updated" ||
-        log.kind === "maintenance_performed"
-      ) {
-        const location = log.location;
-        const isSafe = log.kind === "maintenance_performed";
-
-        zoneMap[location] = {
-          location,
-          needsMaintenance: isSafe,
-          isSafe,
-        };
-      }
-    });
-
-    return Object.values(zoneMap);
-  };
 
   return (
     <div className="app">
@@ -60,8 +43,9 @@ const Home: React.FC = () => {
           src="/dinoparks-logo.png"
           alt="Dinoparks Logo"
           className="logo"
-          width={100}
+          width={400}
           height={100}
+          priority
         />
         <h1>Park Zones</h1>
         <p>{new Date().toLocaleDateString()}</p>
