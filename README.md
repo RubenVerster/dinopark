@@ -64,3 +64,7 @@ A full coverage report will also be given
 ## Live Deployment
 
 https://dinopark.vercel.app/
+
+logs won't work here since filesecurity and all that :P
+Logs should be pushed to a service like Grafana using Prometheus
+But this is just a THA :)
