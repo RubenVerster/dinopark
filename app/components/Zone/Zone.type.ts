@@ -1,11 +1,9 @@
-type ZoneType = {
+export type ZoneType = {
   location: string;
   needsMaintenance: boolean;
   isSafe: boolean | undefined;
 };
 
-interface ZoneProps {
+export interface ZoneProps {
   zone?: ZoneType;
 }
-
-export type { ZoneType, ZoneProps };

@@ -20,6 +20,7 @@ const Zone: React.FC<ZoneProps> = ({ zone }) => {
           className="icon"
           width={20}
           height={20}
+          priority
         />
       )}
     </div>
