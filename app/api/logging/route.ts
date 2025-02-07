@@ -8,7 +8,6 @@ export async function POST(request: NextRequest) {
   try {
     const { visitorId, action } = await request.json();
 
-    console.log(`TEST`, visitorId, action);
     if (!visitorId || !action) {
       return NextResponse.json(
         { error: "Missing visitorId or action" },
